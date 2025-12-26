@@ -3,43 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MasterClass: Condicionales en Inglés</title>
+    <title>MasterClass: Condicionales en Inglés con IA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f5f5f4; /* stone-100 */
+            background-color: #f5f5f4;
         }
         
-        /* Chart Container Styling Requirements */
         .chart-container {
             position: relative;
             width: 100%;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
-            height: 300px;
-            max-height: 400px;
-        }
-
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
+            height: 250px;
         }
 
         .card-shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        .transition-all-300 {
-            transition: all 0.3s ease-in-out;
-        }
-
-        .highlight-box {
-            border-left: 4px solid #d97706; /* amber-600 */
         }
 
         @keyframes pulse-soft {
@@ -49,207 +33,202 @@
         .loading-pulse {
             animation: pulse-soft 2s infinite;
         }
+        
+        .nav-btn-active {
+            border-bottom: 4px solid #d97706;
+            color: #d97706;
+            font-weight: 700;
+        }
     </style>
-    <!-- Chosen Palette: Warm Neutrals (Stone) with semantic accents (Teal for reality, Indigo for hypothesis, Rose for impossibility, Amber for UI highlights) -->
+    <!-- Chosen Palette: Warm Neutrals with Semantic Accents -->
     <!-- Application Structure Plan: 
-         1. Dashboard Header: Introduction and core concept.
-         2. Interactive Probability Spectrum: A Chart.js visualization acting as the primary navigation.
-         3. Dynamic Grammar Lab: Central workspace updating based on chart selection.
-         4. AI ✨ Features: 
-            - AI Scenario Generator: Uses Gemini 2.5 Flash to create contextual examples based on user topics.
-            - AI Voice Tutor: Uses Gemini TTS to explain concepts and pronounce examples.
-         5. Comparative Matrix: Sortable view of the summary table.
-         6. "Pro Tips" Zone: Specific callouts for special rules.
-    -->
-    <!-- Visualization & Content Choices:
-         - Probability Bar Chart: Chart.js for likelihood visualization.
-         - AI Integration: 
-            - gemini-2.5-flash-preview-09-2025 for text generation.
-            - gemini-2.5-flash-preview-tts for voice interaction.
+         1. Interactive Menu: Buttons for Zero, First, Second, and Third conditionals to allow direct access.
+         2. Probability Context: Chart.js visualization to show the 'likelihood' scale.
+         3. AI Grammar Lab: Dynamic section for formula building, clause swapping, and AI-powered examples.
+         4. Voice Support: Integration with Gemini TTS for pronunciation and explanations.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
 <body class="text-stone-800 antialiased">
 
-    <!-- Navigation / Header -->
+    <!-- Header & Navigation -->
     <nav class="bg-white border-b border-stone-200 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
+            <div class="flex flex-col md:flex-row justify-between items-center py-4 space-y-4 md:space-y-0">
                 <div class="flex items-center">
                     <span class="text-2xl font-bold text-stone-700 tracking-tight">Grammar<span class="text-amber-600">Lab</span></span>
                 </div>
-                <div class="hidden md:flex space-x-8">
-                    <button onclick="scrollToSection('visualizer')" class="text-stone-500 hover:text-amber-600 transition-colors">Visualizador</button>
-                    <button onclick="scrollToSection('matrix')" class="text-stone-500 hover:text-amber-600 transition-colors">Comparativa</button>
-                    <button onclick="scrollToSection('tips')" class="text-stone-500 hover:text-amber-600 transition-colors">Notas Clave</button>
+                <!-- Conditional Selection Menu -->
+                <div class="flex flex-wrap justify-center gap-2" id="main-nav">
+                    <button onclick="updateDashboard('zero')" id="btn-nav-zero" class="px-4 py-2 text-sm font-semibold text-stone-500 hover:text-amber-600 transition-all border-b-4 border-transparent">Zero</button>
+                    <button onclick="updateDashboard('first')" id="btn-nav-first" class="px-4 py-2 text-sm font-semibold text-stone-500 hover:text-amber-600 transition-all border-b-4 border-transparent">First</button>
+                    <button onclick="updateDashboard('second')" id="btn-nav-second" class="px-4 py-2 text-sm font-semibold text-stone-500 hover:text-amber-600 transition-all border-b-4 border-transparent">Second</button>
+                    <button onclick="updateDashboard('third')" id="btn-nav-third" class="px-4 py-2 text-sm font-semibold text-stone-500 hover:text-amber-600 transition-all border-b-4 border-transparent">Third</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
 
         <!-- Intro Section -->
-        <section class="text-center space-y-4">
-            <h1 class="text-4xl font-extrabold text-stone-900 sm:text-5xl">Condicionales con IA</h1>
-            <p class="max-w-2xl mx-auto text-lg text-stone-600">
-                Aprende inglés de forma inteligente. Explora la probabilidad y utiliza nuestra ✨ IA para generar ejemplos personalizados y escuchar su pronunciación.
-            </p>
+        <section class="text-center space-y-2">
+            <h1 class="text-3xl font-extrabold text-stone-900 sm:text-4xl">Dominio de Condicionales con IA</h1>
+            <p class="text-stone-600">Selecciona un tipo arriba y utiliza la inteligencia artificial para crear escenarios reales.</p>
         </section>
 
-        <!-- Interactive Visualizer Section -->
-        <section id="visualizer" class="bg-white rounded-2xl card-shadow p-6 md:p-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                <!-- Left Column: The Chart (Controller) -->
-                <div class="lg:col-span-1 flex flex-col space-y-4">
-                    <div class="border-b border-stone-100 pb-2">
-                        <h2 class="text-xl font-bold text-stone-800">1. Probabilidad</h2>
-                        <p class="text-sm text-stone-500">Haz clic en una barra para filtrar el contenido.</p>
-                    </div>
-                    
-                    <div class="bg-stone-50 rounded-xl p-4 border border-stone-100 flex-grow flex flex-col justify-center">
-                        <div class="chart-container">
-                            <canvas id="conditionalChart"></canvas>
-                        </div>
+        <!-- Main Visualizer & Lab -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Panel: Probability & Summary -->
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bg-white rounded-2xl card-shadow p-6 border border-stone-100">
+                    <h2 class="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
+                        📊 Escala de Realismo
+                    </h2>
+                    <div class="chart-container">
+                        <canvas id="conditionalChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Right Column: The Dynamic Lab (Content) -->
-                <div class="lg:col-span-2 flex flex-col">
-                    <div class="border-b border-stone-100 pb-2 mb-4 flex justify-between items-center">
-                        <div>
-                            <h2 class="text-xl font-bold text-stone-800">2. Laboratorio de Estructuras</h2>
-                            <p class="text-sm text-stone-500">Analiza la gramática y genera ejemplos con IA.</p>
-                        </div>
-                        <span id="current-badge" class="px-3 py-1 rounded-full text-sm font-semibold bg-teal-100 text-teal-800">Zero Conditional</span>
-                    </div>
-
-                    <!-- AI Interaction Zone -->
-                    <div id="ai-controls" class="mb-6 p-4 bg-amber-50 rounded-xl border border-amber-200">
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <input type="text" id="ai-topic" placeholder="Escribe un tema (ej: viajes, cocina, espacio)..." class="flex-grow px-4 py-2 rounded-lg border border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm">
-                            <button onclick="generateAIExamples()" id="btn-ai" class="bg-amber-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-amber-700 transition-colors flex items-center justify-center gap-2">
-                                ✨ Generar Ejemplos
-                            </button>
-                            <button onclick="explainWithAI()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2">
-                                🔊 Explicación IA
-                            </button>
-                        </div>
-                        <div id="ai-loading" class="hidden mt-2 text-xs text-amber-600 font-medium loading-pulse">Pensando en nuevos escenarios...</div>
-                    </div>
-
-                    <!-- Dynamic Content Container -->
-                    <div id="dynamic-content" class="space-y-6">
-                        <!-- Content injected via JS -->
-                    </div>
+                <div class="bg-indigo-900 text-indigo-100 rounded-2xl card-shadow p-6">
+                    <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
+                        🔊 Tutor de Voz IA
+                    </h3>
+                    <p class="text-xs text-indigo-300 mb-4">Escucha una explicación detallada del condicional actual generada por Gemini.</p>
+                    <button onclick="explainWithAI()" class="w-full bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
+                        Reproducir Explicación
+                    </button>
                 </div>
             </div>
-        </section>
 
-        <!-- Comparison Matrix Section -->
-        <section id="matrix" class="space-y-6">
-            <div class="text-center md:text-left">
-                <h2 class="text-2xl font-bold text-stone-900">Matriz Comparativa</h2>
-            </div>
-            <div class="bg-white rounded-xl card-shadow overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-stone-200">
-                        <thead class="bg-stone-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase">Tipo</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase">Uso</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase">Probabilidad</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase">If-Clause</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase">Result</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-stone-200" id="comparison-table-body"></tbody>
-                    </table>
+            <!-- Right Panel: Interactive Lab -->
+            <div class="lg:col-span-8 bg-white rounded-2xl card-shadow p-6 md:p-8 border border-stone-100">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-stone-100 pb-4 mb-6 gap-4">
+                    <div>
+                        <h2 id="lab-title" class="text-2xl font-bold text-stone-800">Zero Conditional</h2>
+                        <p id="lab-usage" class="text-stone-500 font-medium">Uso: Verdades Universales</p>
+                    </div>
+                    <div id="prob-badge" class="px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-teal-100 text-teal-700 border border-teal-200">
+                        Probabilidad: 100%
+                    </div>
+                </div>
+
+                <!-- AI Generation Form -->
+                <div class="mb-8 p-5 bg-amber-50 rounded-2xl border border-amber-100">
+                    <label class="block text-sm font-bold text-amber-900 mb-2">✨ Generador de Ejemplos Personalizados (IA)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="ai-topic" placeholder="Ej: fútbol, cocina, viajes..." class="flex-grow px-4 py-3 rounded-xl border border-amber-200 focus:ring-2 focus:ring-amber-500 outline-none shadow-sm">
+                        <button onclick="generateAIExamples()" id="btn-ai" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all flex items-center gap-2">
+                            Crear
+                        </button>
+                    </div>
+                    <div id="ai-loading" class="hidden mt-3 text-xs text-amber-700 font-bold loading-pulse flex items-center gap-2">
+                        <span>⏳ Consultando a Gemini para crear oraciones...</span>
+                    </div>
+                </div>
+
+                <!-- Dynamic Grammar Content -->
+                <div id="dynamic-content" class="space-y-8">
+                    <!-- Formula & Examples will be injected here -->
                 </div>
             </div>
         </section>
 
-        <!-- Key Notes & Tips -->
-        <section id="tips" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-amber-50 border border-amber-100 rounded-xl p-6">
-                <h3 class="font-bold text-amber-900 mb-2">La Regla de la Coma</h3>
-                <p class="text-amber-800 text-sm italic">If I go, I'll see you. / I'll see you if I go.</p>
+        <!-- Summary Table -->
+        <section class="bg-white rounded-2xl card-shadow overflow-hidden border border-stone-100">
+            <div class="p-6 border-b border-stone-100 bg-stone-50">
+                <h2 class="text-xl font-bold text-stone-800">Referencia Rápida</h2>
             </div>
-            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6">
-                <h3 class="font-bold text-indigo-900 mb-2">"Were" Universal</h3>
-                <p class="text-indigo-800 text-sm">Se prefiere "were" para todas las personas en el 2nd Conditional.</p>
-            </div>
-            <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-6">
-                <h3 class="font-bold text-emerald-900 mb-2">Unless = If not</h3>
-                <p class="text-emerald-800 text-sm">"A menos que". Simplifica tus oraciones negativas.</p>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-stone-200">
+                    <thead>
+                        <tr class="bg-stone-50">
+                            <th class="px-6 py-4 text-left text-xs font-bold text-stone-400 uppercase">Tipo</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-stone-400 uppercase">Estructura</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-stone-400 uppercase">Función</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summary-table" class="divide-y divide-stone-100">
+                        <!-- Table rows injected by JS -->
+                    </tbody>
+                </table>
             </div>
         </section>
+
     </main>
 
-    <!-- JavaScript Application Logic -->
-    <script>
-        const apiKey = ""; // Empty string for environment handling
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    <footer class="text-center py-10 text-stone-400 text-sm">
+        Potenciado por Gemini 2.5 Flash • GrammarLab v2.0
+    </footer>
 
+    <script>
+        const apiKey = ""; // Environment provided
+        
         const conditionalsData = {
             zero: {
                 title: "Zero Conditional",
                 usage: "Verdades Universales",
                 probability: 100,
-                desc: "Hechos generales y verdades científicas.",
+                desc: "Se usa para hechos científicos, leyes de la naturaleza o verdades lógicas que no cambian.",
                 formula: { if: "Present Simple", result: "Present Simple" },
                 examples: [
-                    { en: "If you heat ice, it melts.", es: "Si calientas hielo, se derrite." },
-                    { en: "Plants die if they don't get enough water.", es: "Las plantas mueren si no reciben suficiente agua." }
+                    { en: "If you heat water to 100 degrees, it boils.", es: "Si calientas agua a 100 grados, hierve." },
+                    { en: "If I don't sleep, I feel tired.", es: "Si no duermo, me siento cansado." }
                 ],
                 color: "rgba(20, 184, 166, 0.8)",
-                borderColor: "rgba(20, 184, 166, 1)"
+                borderColor: "#14b8a6"
             },
             first: {
                 title: "First Conditional",
                 usage: "Posibilidad Real",
                 probability: 75,
-                desc: "Situaciones probables en el futuro.",
+                desc: "Describe situaciones futuras que son muy probables si se cumple la condición.",
                 formula: { if: "Present Simple", result: "Will + Infinitivo" },
                 examples: [
-                    { en: "If it rains tomorrow, I will stay at home.", es: "Si llueve mañana, me quedaré en casa." },
-                    { en: "If you study hard, you will pass.", es: "Si estudias mucho, aprobarás." }
+                    { en: "If it rains tomorrow, I will take an umbrella.", es: "Si llueve mañana, llevaré un paraguas." },
+                    { en: "If you study, you will pass the exam.", es: "Si estudias, aprobarás el examen." }
                 ],
                 color: "rgba(59, 130, 246, 0.8)",
-                borderColor: "rgba(59, 130, 246, 1)"
+                borderColor: "#3b82f6"
             },
             second: {
                 title: "Second Conditional",
                 usage: "Situaciones Hipotéticas",
                 probability: 15,
-                desc: "Situaciones imaginarias o irreales ahora.",
+                desc: "Situaciones imaginarias en el presente o muy improbables en el futuro.",
                 formula: { if: "Past Simple", result: "Would + Infinitivo" },
                 examples: [
-                    { en: "If I won the lottery, I would travel.", es: "Si ganara la lotería, viajaría." },
-                    { en: "If I were you, I would tell her.", es: "Si fuera tú, se lo diría." }
+                    { en: "If I won the lottery, I would buy a mansion.", es: "Si ganara la lotería, compraría una mansión." },
+                    { en: "If I were you, I wouldn't do that.", es: "Si yo fuera tú, no haría eso." }
                 ],
                 color: "rgba(99, 102, 241, 0.8)",
-                borderColor: "rgba(99, 102, 241, 1)"
+                borderColor: "#6366f1"
             },
             third: {
                 title: "Third Conditional",
                 usage: "Imposibilidad Pasada",
                 probability: 0,
-                desc: "Hipótesis sobre el pasado que no ocurrió.",
+                desc: "Se refiere a arrepentimientos o hipótesis sobre el pasado que ya no pueden cambiarse.",
                 formula: { if: "Past Perfect", result: "Would have + Participio" },
                 examples: [
                     { en: "If I had studied more, I would have passed.", es: "Si hubiera estudiado más, habría aprobado." },
-                    { en: "If we had left earlier, we wouldn't have missed it.", es: "Si hubiéramos salido antes, no lo habríamos perdido." }
+                    { en: "If they had arrived earlier, they wouldn't have missed it.", es: "Si hubieran llegado antes, no lo habrían perdido." }
                 ],
                 color: "rgba(244, 63, 94, 0.8)",
-                borderColor: "rgba(244, 63, 94, 1)"
+                borderColor: "#f43f5e"
             }
         };
 
-        let currentState = { activeKey: 'zero', swappedOrder: false };
+        let activeKey = 'zero';
         let myChart;
+
+        // Initialize App
+        window.onload = () => {
+            initChart();
+            renderTable();
+            updateDashboard('zero');
+        };
 
         function initChart() {
             const ctx = document.getElementById('conditionalChart').getContext('2d');
@@ -259,99 +238,161 @@
                     labels: ['Zero', 'First', 'Second', 'Third'],
                     datasets: [{
                         data: [100, 75, 15, 5],
-                        backgroundColor: Object.values(conditionalsData).map(d => d.color),
-                        borderColor: Object.values(conditionalsData).map(d => d.borderColor),
+                        backgroundColor: Object.values(conditionalsData).map(v => v.color),
+                        borderColor: Object.values(conditionalsData).map(v => v.borderColor),
                         borderWidth: 1,
-                        borderRadius: 6
+                        borderRadius: 8
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true, max: 100 } },
-                    onClick: (e, activeElements) => {
-                        if (activeElements.length > 0) {
-                            updateDashboard(Object.keys(conditionalsData)[activeElements[0].index]);
-                        }
+                    scales: { 
+                        y: { beginAtZero: true, max: 100, grid: { display: false } },
+                        x: { grid: { display: false } }
                     }
                 }
             });
         }
 
-        async function geminiFetch(prompt, systemInstruction) {
-            let delay = 1000;
-            for (let i = 0; i < 5; i++) {
-                try {
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: prompt }] }],
-                            systemInstruction: { parts: [{ text: systemInstruction }] },
-                            generationConfig: { responseMimeType: "application/json" }
-                        })
-                    });
-                    const data = await response.json();
-                    return JSON.parse(data.candidates[0].content.parts[0].text);
-                } catch (e) {
-                    await new Promise(r => setTimeout(r, delay));
-                    delay *= 2;
-                }
-            }
-            throw new Error("API failed after retries");
+        function updateDashboard(key) {
+            activeKey = key;
+            const data = conditionalsData[key];
+            
+            // UI Updates: Nav Buttons
+            document.querySelectorAll('#main-nav button').forEach(btn => btn.classList.remove('nav-btn-active'));
+            document.getElementById(`btn-nav-${key}`).classList.add('nav-btn-active');
+
+            // UI Updates: Header Info
+            document.getElementById('lab-title').innerText = data.title;
+            document.getElementById('lab-usage').innerText = `Uso: ${data.usage}`;
+            const badge = document.getElementById('prob-badge');
+            badge.innerText = `Probabilidad: ${data.probability}%`;
+            badge.style.backgroundColor = data.color.replace('0.8)', '0.1)');
+            badge.style.color = data.borderColor;
+            badge.style.borderColor = data.borderColor;
+
+            // Lab Content Rendering
+            const container = document.getElementById('dynamic-content');
+            container.innerHTML = `
+                <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200">
+                    <p class="text-stone-700 leading-relaxed font-medium">${data.desc}</p>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="font-bold text-stone-800 uppercase tracking-widest text-xs">Estructura Gramatical</h3>
+                    <div class="flex flex-col md:flex-row gap-4 items-center">
+                        <div class="flex-1 w-full bg-stone-800 text-white p-6 rounded-2xl shadow-lg border-b-4 border-stone-900">
+                            <span class="block text-xs font-bold text-stone-400 mb-1 uppercase">Cláusula IF</span>
+                            <span class="text-xl font-bold">If + ${data.formula.if}</span>
+                        </div>
+                        <div class="text-3xl text-stone-300 font-bold">,</div>
+                        <div class="flex-1 w-full bg-white border-2 border-stone-800 text-stone-800 p-6 rounded-2xl shadow-lg border-b-4 border-stone-100">
+                            <span class="block text-xs font-bold text-stone-400 mb-1 uppercase">Resultado</span>
+                            <span class="text-xl font-bold">${data.formula.result}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="font-bold text-stone-800 uppercase tracking-widest text-xs">Ejemplos Dinámicos</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="examples-grid">
+                        ${data.examples.map(ex => `
+                            <div class="p-5 bg-white border border-stone-200 rounded-2xl hover:border-amber-400 hover:shadow-md transition-all cursor-pointer group" onclick="speakSingle('${ex.en.replace(/'/g, "\\'")}')">
+                                <p class="text-lg font-bold text-stone-800 group-hover:text-amber-700">${ex.en}</p>
+                                <p class="text-sm text-stone-500">${ex.es}</p>
+                                <div class="mt-2 text-[10px] font-bold text-stone-300 group-hover:text-amber-500 uppercase">Click para pronunciar</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
         }
 
         async function generateAIExamples() {
-            const topic = document.getElementById('ai-topic').value || 'general topics';
+            const topic = document.getElementById('ai-topic').value || 'la vida diaria';
             const loading = document.getElementById('ai-loading');
-            const data = conditionalsData[currentState.activeKey];
-            
             loading.classList.remove('hidden');
+            
+            const data = conditionalsData[activeKey];
+            const systemPrompt = `Eres un profesor de inglés nativo. Crea 2 ejemplos del "${data.title}" sobre el tema "${topic}". 
+            Uso: ${data.usage}. Estructura: IF + ${data.formula.if}, ${data.formula.result}. 
+            Devuelve un JSON estrictamente con este formato: {"examples": [{"en": "...", "es": "..."}]}`;
+
             try {
-                const system = `You are an expert English teacher. Generate 3 unique examples of the ${data.title} (${data.desc}) about the topic: ${topic}. Return as a JSON object with an array 'examples' containing objects with 'en' and 'es' keys.`;
-                const result = await geminiFetch(`Give me 3 examples for ${data.title} about ${topic}`, system);
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Tema: ${topic}` }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                        generationConfig: { responseMimeType: "application/json" }
+                    })
+                });
                 
-                // Mezclar con los básicos
-                data.examples = [...result.examples, ...conditionalsData[currentState.activeKey].examples.slice(-2)];
-                updateDashboard(currentState.activeKey);
-            } catch (e) {
-                console.error(e);
+                const result = await response.json();
+                const aiData = JSON.parse(result.candidates[0].content.parts[0].text);
+                
+                // Add to current UI view without overwriting permanent data
+                const grid = document.getElementById('examples-grid');
+                aiData.examples.forEach(ex => {
+                    const div = document.createElement('div');
+                    div.className = "p-5 bg-amber-50 border border-amber-200 rounded-2xl hover:border-amber-400 hover:shadow-md transition-all cursor-pointer group";
+                    div.onclick = () => speakSingle(ex.en);
+                    div.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <p class="text-lg font-bold text-amber-900 group-hover:text-amber-700">${ex.en}</p>
+                            <span class="text-[10px] bg-amber-200 text-amber-700 px-2 py-0.5 rounded-full font-bold">✨ IA</span>
+                        </div>
+                        <p class="text-sm text-amber-600">${ex.es}</p>
+                        <div class="mt-2 text-[10px] font-bold text-amber-300 group-hover:text-amber-500 uppercase">Click para pronunciar</div>
+                    `;
+                    grid.prepend(div);
+                });
+            } catch (err) {
+                console.error("AI Generation failed", err);
             } finally {
                 loading.classList.add('hidden');
             }
         }
 
         async function explainWithAI() {
-            const data = conditionalsData[currentState.activeKey];
-            const prompt = `Say cheerfully: Welcome to the ${data.title} section! This conditional is used for ${data.usage}. Let me tell you an example: ${data.examples[0].en}. Remember, the structure is If plus ${data.formula.if}, then ${data.formula.result}.`;
+            const data = conditionalsData[activeKey];
+            const text = `The ${data.title} is used for ${data.usage}. Let me explain: ${data.desc}. For example: ${data.examples[0].en}. Pay attention to the structure, which is If plus ${data.formula.if}, then ${data.formula.result}.`;
             
+            await speakText(text, "Kore");
+        }
+
+        async function speakSingle(phrase) {
+            await speakText(`Listen carefully: ${phrase}`, "Puck");
+        }
+
+        async function speakText(text, voice) {
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
                     method: 'POST',
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
+                        contents: [{ parts: [{ text: text }] }],
                         generationConfig: { 
                             responseModalities: ["AUDIO"],
-                            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } }
+                            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } } }
                         }
                     })
                 });
                 const result = await response.json();
-                const pcmData = result.candidates[0].content.parts[0].inlineData.data;
-                playPCM(pcmData);
-            } catch (e) {
-                console.error("TTS failed", e);
-            }
+                const pcmBase64 = result.candidates[0].content.parts[0].inlineData.data;
+                playAudioFromPCM(pcmBase64);
+            } catch (e) { console.error("TTS failed", e); }
         }
 
-        function playPCM(base64Data) {
+        function playAudioFromPCM(base64Data) {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const binaryString = window.atob(base64Data);
             const len = binaryString.length;
             const bytes = new Uint8Array(len);
             for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
             
-            // Assume 24kHz mono (typical for this API)
             const audioBuffer = audioCtx.createBuffer(1, len / 2, 24000);
             const channelData = audioBuffer.getChannelData(0);
             const view = new DataView(bytes.buffer);
@@ -365,97 +406,19 @@
             source.start();
         }
 
-        function updateDashboard(key) {
-            currentState.activeKey = key;
-            const data = conditionalsData[key];
-            const container = document.getElementById('dynamic-content');
-            const badge = document.getElementById('current-badge');
-
-            badge.innerText = data.title;
-            badge.style.backgroundColor = data.color.replace('0.8)', '0.2)');
-            badge.style.color = data.borderColor;
-
-            const ifPart = `<div class="flex-1 bg-stone-800 text-white p-4 rounded-lg text-center shadow">
-                <span class="text-xs text-stone-400 block mb-1">IF CLAUSE</span>
-                <span class="font-bold">If + ${data.formula.if}</span>
-            </div>`;
-            const resultPart = `<div class="flex-1 bg-white border-2 border-stone-800 p-4 rounded-lg text-center shadow">
-                <span class="text-xs text-stone-500 block mb-1">RESULT</span>
-                <span class="font-bold">${data.formula.result}</span>
-            </div>`;
-
-            let formulaHTML = currentState.swappedOrder ? `${resultPart} <span class="self-center px-2 text-stone-400">...</span> ${ifPart}` : `${ifPart} <span class="self-end text-3xl pb-2 text-stone-300">,</span> ${resultPart}`;
-
-            container.innerHTML = `
-                <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
-                    <p class="text-stone-700 font-medium">${data.desc}</p>
-                </div>
-                <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-bold text-stone-800">Fórmula</h3>
-                        <button onclick="toggleOrder()" class="text-xs bg-white border border-stone-300 px-2 py-1 rounded hover:bg-stone-100 transition">⇄ Swap</button>
-                    </div>
-                    <div class="flex flex-col md:flex-row gap-3 bg-stone-100 p-4 rounded-xl border border-dashed border-stone-300">
-                        ${formulaHTML}
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <h3 class="font-bold text-stone-800">Ejemplos</h3>
-                    ${data.examples.map(ex => `
-                        <div class="bg-white p-3 rounded border border-stone-200 shadow-sm hover:border-amber-400 transition cursor-help" onclick="speakText('${ex.en.replace(/'/g, "\\'")}')">
-                            <p class="font-bold text-stone-800">${ex.en}</p>
-                            <p class="text-sm text-stone-500">${ex.es}</p>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        async function speakText(text) {
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Say clearly: ${text}` }] }],
-                        generationConfig: { 
-                            responseModalities: ["AUDIO"],
-                            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Puck" } } }
-                        }
-                    })
-                });
-                const result = await response.json();
-                playPCM(result.candidates[0].content.parts[0].inlineData.data);
-            } catch (e) { console.error(e); }
-        }
-
-        function toggleOrder() {
-            currentState.swappedOrder = !currentState.swappedOrder;
-            updateDashboard(currentState.activeKey);
-        }
-
-        function renderComparisonTable() {
-            const tbody = document.getElementById('comparison-table-body');
+        function renderTable() {
+            const tbody = document.getElementById('summary-table');
             Object.keys(conditionalsData).forEach(key => {
                 const d = conditionalsData[key];
                 tbody.innerHTML += `
-                    <tr class="hover:bg-stone-50 transition cursor-pointer" onclick="updateDashboard('${key}'); scrollToSection('visualizer');">
-                        <td class="px-6 py-4 font-bold text-sm">${d.title}</td>
-                        <td class="px-6 py-4 text-xs text-stone-500">${d.usage}</td>
-                        <td class="px-6 py-4"><span class="text-xs px-2 py-1 rounded bg-stone-100">${d.probability}%</span></td>
-                        <td class="px-6 py-4 text-xs font-mono">${d.formula.if}</td>
-                        <td class="px-6 py-4 text-xs font-mono">${d.formula.result}</td>
+                    <tr class="hover:bg-stone-50 cursor-pointer transition-colors" onclick="updateDashboard('${key}'); window.scrollTo({top: 0, behavior: 'smooth'});">
+                        <td class="px-6 py-4 font-bold text-stone-900">${d.title}</td>
+                        <td class="px-6 py-4 text-sm font-mono text-stone-500">If + ${d.formula.if}, ${d.formula.result}</td>
+                        <td class="px-6 py-4 text-sm text-stone-600">${d.usage}</td>
                     </tr>
                 `;
             });
         }
-
-        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
-
-        window.onload = () => {
-            initChart();
-            renderComparisonTable();
-            updateDashboard('zero');
-        };
     </script>
 </body>
 </html>
